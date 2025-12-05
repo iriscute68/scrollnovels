@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scroll Novels - Complete Feature Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.pass {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        .status.fail {
+            background: #fee2e2;
+            color: #7f1d1d;
+            border: 1px solid #fca5a5;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e3a8a;
+            border: 1px solid #93c5fd;
+        }
+        #console-output {
+            background: #1e1e1e;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .line {
+            margin: 3px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🔧 Scroll Novels Feature Test Suite</h1>
+
+<div class="section">
+    <h2>1️⃣ Test Top Supporters Feature (Book ID: 4 - The Last Survivor)</h2>
+    <p><strong>Author ID:</strong> 1 (testuser)</p>
+    <button onclick="testTopSupporters()">Test Top Supporters Loading</button>
+    <div id="supporters-test-result"></div>
+</div>
+
+<div class="section">
+    <h2>2️⃣ Test Judging Dashboard Stats (Admin Only)</h2>
+    <button onclick="testJudgingStats()">Test Judging Dashboard</button>
+    <div id="judging-test-result"></div>
+</div>
+
+<div class="section">
+    <h2>3️⃣ Console Output</h2>
+    <p>Watch this section for all log messages when running tests:</p>
+    <div id="console-output"></div>
+    <button onclick="document.getElementById('console-output').innerHTML = ''">Clear Console</button>
+</div>
+
+<div class="section">
+    <h2>📊 Summary</h2>
+    <div id="summary"></div>
+</div>
+
+<script>
+// Override console.log to capture output
+const origLog = console.log;
+const origError = console.error;
+const origWarn = console.warn;
+
+function captureLog(type, args) {
+    const output = document.getElementById('console-output');
+    const line = document.createElement('div');
+    line.className = 'line';
+    const time = new Date().toLocaleTimeString();
+    const msg = Array.from(args).map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ');
+    
+    let emoji = '📝';
+    if (type === 'error') emoji = '❌';
+    if (type === 'warn') emoji = '⚠️';
+    
+    line.textContent = `[${time}] ${emoji} ${msg}`;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+}
+
+console.log = function(...args) {
+    origLog.apply(console, args);
+    captureLog('log', args);
+};
+
+console.error = function(...args) {
+    origError.apply(console, args);
+    captureLog('error', args);
+};
+
+console.warn = function(...args) {
+    origWarn.apply(console, args);
+    captureLog('warn', args);
+};
+
+// Test Top Supporters
+async function testTopSupporters() {
+    console.log('=== Starting Top Supporters Test ===');
+    const result = document.getElementById('supporters-test-result');
+    result.innerHTML = '<div class="status info">⏳ Running test...</div>';
+    
+    try {
+        console.log('📍 Step 1: Testing API directly');
+        const authorId = 1;
+        const url = `http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=${authorId}&limit=200`;
+        console.log('🔗 API URL: ' + url);
+        
+        const response = await fetch(url);
+        console.log('📬 Response status: ' + response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('✅ JSON parsed successfully');
+        console.log('📊 Response data:', data);
+        
+        if (data.success && data.data && data.data.length > 0) {
+            console.log(`✅ TEST PASSED: Found ${data.data.length} supporters`);
+            result.innerHTML = `
+                <div class="status pass">
+                    ✅ TOP SUPPORTERS TEST PASSED<br>
+                    Found ${data.data.length} supporter(s)<br>
+                    Supporters: ${data.data.map(s => s.username).join(', ')}<br>
+                    <small>See console for full response data</small>
+                </div>
+            `;
+        } else {
+            console.log('⚠️ No supporters found but API working');
+            result.innerHTML = `
+                <div class="status info">
+                    ℹ️ API WORKING BUT NO SUPPORTERS<br>
+                    Response: ${JSON.stringify(data)}<br>
+                    <small>This is expected if author has no supporters</small>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('❌ TEST FAILED:', error.message);
+        result.innerHTML = `
+            <div class="status fail">
+                ❌ TOP SUPPORTERS TEST FAILED<br>
+                Error: ${error.message}<br>
+                <small>Check console for more details</small>
+            </div>
+        `;
+    }
+}
+
+// Test Judging Dashboard
+async function testJudgingStats() {
+    console.log('=== Starting Judging Dashboard Test ===');
+    const result = document.getElementById('judging-test-result');
+    result.innerHTML = '<div class="status info">⏳ Testing judging dashboard...</div>';
+    
+    try {
+        console.log('📍 Step 1: Fetching judging dashboard');
+        const response = await fetch('http://localhost/scrollnovels/admin/competition_judging.php');
+        console.log('📬 Response status: ' + response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const html = await response.text();
+        console.log('📄 HTML received, length: ' + html.length);
+        
+        // Check for stats elements
+        const hasStats = html.includes('Total Entries') && html.includes('Scored') && html.includes('Pending');
+        console.log('📊 Has stats elements: ' + hasStats);
+        
+        const hasGoodStyling = html.includes('color: #333') || html.includes('#333');
+        console.log('🎨 Has dark text styling: ' + hasGoodStyling);
+        
+        if (hasStats && hasGoodStyling) {
+            console.log('✅ TEST PASSED: Judging dashboard has stats with proper styling');
+            result.innerHTML = `
+                <div class="status pass">
+                    ✅ JUDGING DASHBOARD TEST PASSED<br>
+                    ✓ Stats elements present<br>
+                    ✓ Dark text styling applied (#333)<br>
+                    <small>Dashboard should display stats labels correctly</small>
+                </div>
+            `;
+        } else {
+            result.innerHTML = `
+                <div class="status info">
+                    ℹ️ PARTIAL RESULTS<br>
+                    Has stats: ${hasStats}<br>
+                    Has good styling: ${hasGoodStyling}<br>
+                    <small>Check console for details</small>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('❌ TEST FAILED:', error.message);
+        result.innerHTML = `
+            <div class="status fail">
+                ❌ JUDGING DASHBOARD TEST FAILED<br>
+                Error: ${error.message}<br>
+                <small>Make sure you're logged in as admin</small>
+            </div>
+        `;
+    }
+}
+
+// Initialize
+console.log('🚀 Test Suite Loaded');
+console.log('Ready to run tests. Click buttons above to begin.');
+</script>
+
+</body>
+</html>

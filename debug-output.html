@@ -1,0 +1,1509 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Scroll Novels</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+	tailwind.config = { darkMode: 'class' };
+	</script>
+	<!-- Apply saved theme as early as possible to avoid FOUC -->
+	<script>
+		(function(){
+			try {
+				var t = localStorage.getItem('scroll-novels-theme');
+				if (t === 'dark') document.documentElement.classList.add('dark');
+			} catch(e){}
+		})();
+	</script>
+	<link rel="stylesheet" href="http://localhost/scrollnovels/assets/css/global.css">
+	<link rel="stylesheet" href="http://localhost/scrollnovels/assets/css/theme.css">
+	<link rel="stylesheet" href="http://localhost/scrollnovels/assets/css/support.css">
+	<link rel="stylesheet" href="http://localhost/scrollnovels/assets/css/notifications.css">
+	<script src="http://localhost/scrollnovels/assets/js/theme.js" defer></script>
+		<link rel="stylesheet" href="/scrollnovels/assets/css/global.css">
+	<link rel="stylesheet" href="/scrollnovels/assets/css/theme.css">
+	<style>
+		:root { --transition-base: 200ms ease-in-out; }
+		body { transition: background-color var(--transition-base), color var(--transition-base); }
+	</style>
+		<!-- Notification Center JS -->
+	<script src="http://localhost/scrollnovels/assets/js/notification-center.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col bg-gradient-to-b from-emerald-50 to-green-100 dark:from-gray-900 dark:to-gray-800 text-emerald-900 dark:text-emerald-50 relative">
+
+<!-- Background Overlay for Readability -->
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); z-index: -1; pointer-events: none;"></div>
+
+<!-- Header -->
+<header class="bg-white dark:bg-gray-900 shadow border-b border-emerald-200 dark:border-emerald-900 sticky top-0 z-50 relative">
+	<div class="max-w-7xl mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
+		<a href="http://localhost/scrollnovels" class="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity">
+			<div class="text-2xl md:text-3xl">📜</div>
+			<h1 class="text-lg md:text-xl font-bold text-emerald-600 dark:text-emerald-400">Scroll Novels</h1>
+		</a>
+		
+		<!-- Desktop Navigation -->
+		<nav class="hidden lg:flex flex-wrap gap-2 text-sm font-medium">
+			<a href="http://localhost/scrollnovels" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Home</a>
+			<a href="http://localhost/scrollnovels/pages/browse.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Browse</a>
+			<a href="http://localhost/scrollnovels/pages/webtoon.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Webtoons</a>
+			<a href="http://localhost/scrollnovels/pages/fanfic.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Fanfic</a>
+			<a href="http://localhost/scrollnovels/pages/rankings.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Rankings</a>
+			<a href="http://localhost/scrollnovels/pages/competitions.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Competitions</a>
+			<a href="http://localhost/scrollnovels/pages/blog.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Blog</a>
+			<a href="http://localhost/scrollnovels/pages/community.php" class="px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50">Community</a>
+		</nav>
+		
+		<div class="flex items-center gap-2 md:gap-4">
+			<!-- Notification Bell -->
+						
+			<!-- Theme Toggle -->
+			<button onclick="toggleTheme()" class="flex items-center gap-2 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 px-2 md:px-3 py-2 rounded-lg transition-colors">
+				<span class="dark:hidden text-lg md:text-xl">☀️</span>
+				<span class="hidden dark:block text-lg md:text-xl">🌙</span>
+			</button>
+			
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors">
+				<span class="text-xl">☰</span>
+			</button>
+			
+			<!-- User Menu Button (hidden on small mobile) -->
+			<button id="sidebarToggle" class="hidden sm:flex items-center gap-2 px-2 md:px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors text-sm font-medium">
+				👤 <span class="hidden md:inline">User</span>
+			</button>
+		</div>
+	</div>
+	
+	<!-- Mobile Navigation Menu -->
+	<div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t border-emerald-200 dark:border-emerald-900">
+		<nav class="px-4 py-3 space-y-1">
+			<a href="http://localhost/scrollnovels" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">🏠 Home</a>
+			<a href="http://localhost/scrollnovels/pages/browse.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">📚 Browse</a>
+			<a href="http://localhost/scrollnovels/pages/webtoon.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">🎨 Webtoons</a>
+			<a href="http://localhost/scrollnovels/pages/fanfic.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">✍️ Fanfic</a>
+			<a href="http://localhost/scrollnovels/pages/rankings.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">🏆 Rankings</a>
+			<a href="http://localhost/scrollnovels/pages/competitions.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">🎯 Competitions</a>
+			<a href="http://localhost/scrollnovels/pages/blog.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">📰 Blog</a>
+			<a href="http://localhost/scrollnovels/pages/community.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">💬 Community</a>
+						<div class="border-t border-emerald-200 dark:border-emerald-700 pt-2 mt-2">
+				<a href="http://localhost/scrollnovels/pages/login.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">🔐 Login</a>
+				<a href="http://localhost/scrollnovels/pages/register.php" class="block px-3 py-2 rounded-md hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-sm font-medium">✍️ Register</a>
+			</div>
+					</nav>
+	</div>
+</header>
+
+<!-- Sidebar Overlay -->
+<div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-40"></div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed right-0 top-0 h-screen w-64 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform z-50 flex flex-col">
+	<div class="p-4 border-b border-emerald-200 dark:border-emerald-900 flex justify-between items-center flex-shrink-0">
+		<h3 class="text-lg font-bold text-emerald-600">Menu</h3>
+		<button id="closeSidebar" class="text-2xl">&times;</button>
+	</div>
+	<nav class="p-4 space-y-3 text-sm overflow-y-auto flex-1">
+					<a href="http://localhost/scrollnovels/pages/login.php" class="block px-3 py-2 rounded-lg hover:bg-emerald-100 dark:hover:bg-gray-700">🔐 Login</a>
+			<a href="http://localhost/scrollnovels/pages/register.php" class="block px-3 py-2 rounded-lg hover:bg-emerald-100 dark:hover:bg-gray-700">✍️ Register</a>
+			<hr class="my-2 border-emerald-200">
+			<button onclick="openAdminLoginModal()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 font-medium">🔒 Admin Login</button>
+			</nav>
+</aside>
+
+<!-- Expose SITE_URL -->
+<script>window.SITE_URL = 'http://localhost/scrollnovels';</script>
+
+<!-- Ensure main content is not hidden under sticky header on smaller viewports -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+	try {
+		function adjustMainPadding(){
+			var hdr = document.querySelector('header');
+			var main = document.querySelector('main');
+			if(hdr && main){
+				var h = hdr.offsetHeight || 64;
+				main.style.paddingTop = h + 'px';
+			}
+		}
+		adjustMainPadding();
+		window.addEventListener('resize', adjustMainPadding);
+	} catch(e){}
+});
+</script>
+
+<!-- Admin Login Modal -->
+<div id="adminLoginModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+	<div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-8">
+		<div class="flex justify-between items-center mb-6">
+			<h3 class="text-2xl font-bold text-gray-900 dark:text-white">🔒 Admin Login</h3>
+			<button onclick="closeAdminLoginModal()" class="text-2xl text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">×</button>
+		</div>
+
+		<form id="adminLoginForm" class="space-y-4" autocomplete="off">
+			<div>
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Admin Email</label>
+				<input type="email" id="adminEmail" placeholder="Enter admin email" autocomplete="off" required
+					class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+			</div>
+
+			<div>
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+				<input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off" required
+					class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+			</div>
+
+			<div id="adminLoginMessage" class="hidden p-3 rounded-lg text-sm"></div>
+
+			<button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+				Login to Admin Panel
+			</button>
+		</form>
+
+		<p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
+			This section is for administrators only
+		</p>
+	</div>
+</div>
+
+<!-- Theme Toggle JS -->
+<script src="http://localhost/scrollnovels/assets/js/theme.js"></script>
+
+<!-- Admin Login Functions -->
+<script>
+function openAdminLoginModal() {
+	document.getElementById('adminLoginModal').classList.remove('hidden');
+	document.getElementById('adminEmail').focus();
+}
+
+function closeAdminLoginModal() {
+	document.getElementById('adminLoginModal').classList.add('hidden');
+	document.getElementById('adminLoginForm').reset();
+	document.getElementById('adminLoginMessage').classList.add('hidden');
+}
+
+document.getElementById('adminLoginForm')?.addEventListener('submit', async function(e) {
+	e.preventDefault();
+    
+	const email = document.getElementById('adminEmail').value;
+	const password = document.getElementById('adminPassword').value;
+	const messageEl = document.getElementById('adminLoginMessage');
+    
+	try {
+		const response = await fetch('http://localhost/scrollnovels/api/admin-login.php', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email, password }),
+			credentials: 'same-origin'
+		});
+        
+		const data = await response.json();
+        
+		if (data.success) {
+			messageEl.textContent = '✅ Login successful! Redirecting...';
+			messageEl.className = 'p-3 rounded-lg text-sm bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300';
+			messageEl.classList.remove('hidden');
+            
+			setTimeout(() => {
+				window.location.href = 'http://localhost/scrollnovels/admin/dashboard.php';
+			}, 1500);
+		} else {
+			messageEl.textContent = '❌ ' + (data.error || 'Login failed');
+			messageEl.className = 'p-3 rounded-lg text-sm bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 text-red-800 dark:text-red-300';
+			messageEl.classList.remove('hidden');
+		}
+	} catch (err) {
+		messageEl.textContent = '❌ Error: ' + err.message;
+		messageEl.className = 'p-3 rounded-lg text-sm bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 text-red-800 dark:text-red-300';
+		messageEl.classList.remove('hidden');
+	}
+});
+
+// Close modal when clicking outside
+document.getElementById('adminLoginModal')?.addEventListener('click', function(e) {
+	if (e.target === this) closeAdminLoginModal();
+});
+</script>
+
+<!-- Global sidebar toggle (works on all pages) -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+	const sidebar = document.getElementById('sidebar');
+	const sidebarToggle = document.getElementById('sidebarToggle');
+	const closeSidebarBtn = document.getElementById('closeSidebar');
+	const overlay = document.getElementById('sidebarOverlay');
+	const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+	const mobileMenu = document.getElementById('mobileMenu');
+	
+	// Mobile menu toggle
+	if (mobileMenuBtn && mobileMenu) {
+		mobileMenuBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			mobileMenu.classList.toggle('hidden');
+			// Change icon
+			this.querySelector('span').textContent = mobileMenu.classList.contains('hidden') ? '☰' : '✕';
+		});
+	}
+	
+	function openSidebar(){
+		if(!sidebar) return;
+		sidebar.classList.remove('translate-x-full');
+		sidebar.classList.add('translate-x-0');
+		overlay && overlay.classList.remove('hidden');
+	}
+	function closeSidebar(){
+		if(!sidebar) return;
+		sidebar.classList.add('translate-x-full');
+		sidebar.classList.remove('translate-x-0');
+		overlay && overlay.classList.add('hidden');
+	}
+	if(sidebarToggle){
+		sidebarToggle.addEventListener('click', function(e){
+			e.preventDefault();
+			// If not logged in, many pages already handle redirect; just open for now
+			openSidebar();
+		});
+	}
+	if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+	if(overlay) overlay.addEventListener('click', closeSidebar);
+});
+</script>
+
+<!-- Main Content -->
+<main class="flex-1">
+
+
+<main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- Breadcrumb -->
+        <div class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+            <a href="http://localhost/scrollnovels/pages/browse.php" class="hover:text-emerald-600">Browse</a>
+            <span> / </span>
+            <span>The Last Survivor</span>
+        </div>
+
+        <!-- Book Header Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 p-8">
+                
+                <!-- Book Cover -->
+                <div class="md:col-span-1">
+                    <div class="aspect-[3/4] bg-emerald-50 dark:bg-emerald-900/30 rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
+                                                                            <img src="https://via.placeholder.com/300x400?text=Book+Cover" alt="The Last Survivor" class="w-full h-full object-cover">
+                                            </div>
+                </div>
+
+                <!-- Book Info -->
+                <div class="md:col-span-3 space-y-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                                The Last Survivor                            </h1>
+                            <!-- Status Badge -->
+                                                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                Ongoing                            </span>
+                        </div>
+                        <p class="text-lg text-emerald-600 dark:text-emerald-400 font-semibold">
+                            by <a href="http://localhost/scrollnovels/pages/profile.php?user_id=1" class="hover:underline">testuser</a>
+                        </p>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="flex flex-wrap gap-6 py-4 border-y border-gray-200 dark:border-gray-700">
+                        <div>
+                            <div class="text-2xl font-bold text-emerald-600">⭐ 3</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">1 reviews</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-blue-600">👁️ 661</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Views</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-purple-600">📖 0</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Chapters</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-amber-600">💰 <span id="authorPointsBalance">3</span></div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Author Points</div>
+                        </div>
+                    </div>
+
+                    <!-- Rating Breakdown -->
+                                        <div class="py-4 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Rating Distribution</h3>
+                        <div class="space-y-2">
+                                                                                            <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-8">☆ 5</span>
+                                    <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16 text-right">
+                                        0% (0)
+                                    </span>
+                                </div>
+                                                                                            <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-8">☆ 4</span>
+                                    <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16 text-right">
+                                        0% (0)
+                                    </span>
+                                </div>
+                                                                                            <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-8">☆ 3</span>
+                                    <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-300" style="width: 100%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16 text-right">
+                                        100% (1)
+                                    </span>
+                                </div>
+                                                                                            <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-8">☆ 2</span>
+                                    <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16 text-right">
+                                        0% (0)
+                                    </span>
+                                </div>
+                                                                                            <div class="flex items-center gap-3">
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-8">☆ 1</span>
+                                    <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16 text-right">
+                                        0% (0)
+                                    </span>
+                                </div>
+                                                    </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-2">About</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                    </p>
+                    </div>
+
+                    <!-- Category & Tags -->
+                    <div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Tags</h3>
+                        <div class="flex flex-wrap gap-2">
+                                                    </div>
+                    </div>
+
+                    <!-- Genres -->
+                    
+                    <!-- Content Warnings -->
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 pt-4">
+                                                    <button class="flex-1 min-w-fit px-6 py-3 bg-gray-400 text-white font-semibold rounded-lg cursor-not-allowed" disabled>
+                                No Chapters Yet
+                            </button>
+                                                
+                        <a onclick="openSupportModal(4)" class="flex-1 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                            💝 Support
+                        </a>
+
+                                            </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <div class="flex border-b border-gray-200 dark:border-gray-700 flex-wrap overflow-x-auto">
+                <button onclick="switchTab('chapters')" id="chapters-tab" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold text-xs sm:text-sm text-emerald-600 border-b-2 border-emerald-600 transition whitespace-nowrap">
+                    📖 Ch (0)
+                </button>
+                <button onclick="switchTab('reviews')" id="reviews-tab" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold text-xs sm:text-sm text-gray-600 dark:text-gray-400 border-b-2 border-transparent hover:border-gray-300 transition whitespace-nowrap">
+                    💬 Reviews (1)
+                </button>
+                <button onclick="switchTab('supporters')" id="supporters-tab" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold text-xs sm:text-sm text-gray-600 dark:text-gray-400 border-b-2 border-transparent hover:border-gray-300 transition whitespace-nowrap">
+                    🏆 Top Supporters (<span id="supporters-count">0</span>)
+                </button>
+                <button onclick="switchTab('status')" id="status-tab" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold text-xs sm:text-sm text-gray-600 dark:text-gray-400 border-b-2 border-transparent hover:border-gray-300 transition whitespace-nowrap">
+                    📊 Stats
+                </button>
+            </div>
+
+            <!-- Chapters Tab -->
+            <div id="chapters-content" class="p-8">
+                                    <div class="text-center py-12">
+                        <p class="text-gray-500 dark:text-gray-400 text-lg">No chapters published yet.</p>
+                    </div>
+                            </div>
+
+            <!-- Reviews Tab -->
+            <div id="reviews-content" class="p-8 hidden">
+                <!-- Write Review (if logged in) -->
+                
+                <!-- Reviews List -->
+                                    <div class="space-y-6">
+                                                    <div class="p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-emerald-200 dark:bg-emerald-900 flex items-center justify-center">
+                                                                                            <img src="http://localhost/scrollnovels/uploads/avatars/5.png" alt="Avatar" class="w-full h-full rounded-full object-cover">
+                                                                                    </div>
+                                        <div>
+                                            <a href="http://localhost/scrollnovels/pages/profile.php?user_id=5" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+                                                Zakiel admin                                            </a>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                Dec 05, 2025                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                                                                    <span class="inline-block w-5 h-5" style="background: #fbbf24; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></span>
+                                                                                    <span class="inline-block w-5 h-5" style="background: #fbbf24; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></span>
+                                                                                    <span class="inline-block w-5 h-5" style="background: #fbbf24; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></span>
+                                                                                    <span class="inline-block w-5 h-5" style="background: #d1d5db; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></span>
+                                                                                    <span class="inline-block w-5 h-5" style="background: #d1d5db; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></span>
+                                                                            </div>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                    wow                                </p>
+                                <div class="flex gap-4">
+                                    <button class="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 transition review-like-btn" data-review-id="18" onclick="likeReview(18)">
+                                        👍 <span class="like-count">0</span>
+                                    </button>
+                                    <button class="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-red-600 transition review-dislike-btn" data-review-id="18" onclick="dislikeReview(18)">
+                                        👎 <span class="dislike-count">0</span>
+                                    </button>
+                                </div>
+                            </div>
+                                            </div>
+                            </div>
+
+            <!-- Comments Tab (Discussion on Book) -->
+            <div id="comments-content" class="p-8 hidden">
+                <!-- Post Comment (if logged in) -->
+                
+                <!-- Comments List -->
+                <div id="comments-list" class="space-y-6">
+                    <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <p>Loading comments...</p>
+                    </div>
+                </div>
+            </div>
+            <div id="supporters-content" class="p-8 hidden">
+                <div id="supporters-loading" style="display:block; text-align:center; padding:3rem 0; color:#6b7280;">
+                    <p>Loading supporters...</p>
+                </div>
+                <div id="supporters-list" class="space-y-4" style="display:none;">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div id="supporters-empty" class="text-center py-12" style="display:none;">
+                    <p class="text-gray-500 dark:text-gray-400 text-lg">No supporters yet. Be the first to support!</p>
+                </div>
+            </div>
+
+            <!-- Reading Status Tab -->
+            <div id="status-content" class="p-8 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                                        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-600">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Currently Reading</div>
+                        <div class="text-xs text-gray-500 mt-1">0%</div>
+                    </div>
+                    <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                        <div class="text-3xl font-bold text-purple-600">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Planned</div>
+                        <div class="text-xs text-gray-500 mt-1">0%</div>
+                    </div>
+                    <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                        <div class="text-3xl font-bold text-orange-600">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+                        <div class="text-xs text-gray-500 mt-1">0%</div>
+                    </div>
+                    <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                        <div class="text-3xl font-bold text-red-600">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Abandoned</div>
+                        <div class="text-xs text-gray-500 mt-1">0%</div>
+                    </div>
+                </div>
+
+                            </div>
+        </div>
+
+<script>
+function switchTab(tab) {
+    console.log('📑 switchTab called with:', tab);
+    // Hide all content
+    document.getElementById('chapters-content').classList.add('hidden');
+    document.getElementById('reviews-content').classList.add('hidden');
+    document.getElementById('supporters-content').classList.add('hidden');
+    document.getElementById('status-content').classList.add('hidden');
+    
+    // Remove active state from all tabs
+    document.getElementById('chapters-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+    document.getElementById('reviews-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+    document.getElementById('supporters-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+    document.getElementById('status-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+    
+    // Show selected content
+    document.getElementById(tab + '-content').classList.remove('hidden');
+    document.getElementById(tab + '-tab').classList.add('text-emerald-600', 'border-emerald-600');
+    
+    // Load supporters if supporters tab is selected
+    if (tab === 'supporters') {
+        console.log('💫 Calling loadSupporters()');
+        loadSupporters();
+    }
+}
+
+function loadSupporters() {
+    const loading = document.getElementById('supporters-loading');
+    const list = document.getElementById('supporters-list');
+    const empty = document.getElementById('supporters-empty');
+    const count = document.getElementById('supporters-count');
+    
+    const authorId = 1;
+    
+    if (!authorId || authorId === 'null') {
+        if (loading) loading.style.display = 'none';
+        if (empty) empty.style.display = 'block';
+        if (count) count.textContent = '0';
+        return;
+    }
+    
+    // Hide loading immediately
+    if (loading) loading.style.display = 'none';
+    
+    const url = 'http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=' + authorId + '&limit=200';
+    
+    // Use XMLHttpRequest as fallback to fetch
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onload = function() {
+        try {
+            const data = JSON.parse(xhr.responseText);
+            
+            if (data.success && data.data && data.data.length > 0) {
+                if (list) {
+                    list.innerHTML = '';
+                    data.data.forEach((s, i) => {
+                        const tips = s.tip_amount ? '$' + parseFloat(s.tip_amount).toFixed(2) : '';
+                        const pts = s.points_total ? parseInt(s.points_total) + ' pts' : '';
+                        const support = [tips, pts].filter(x => x).join(' + ') || 'Supporter';
+                        
+                        const html = '<a href="http://localhost/scrollnovels/pages/profile.php?user_id=' + s.supporter_id + '" class="block p-3 bg-yellow-50 dark:bg-gray-700 rounded hover:shadow transition">' +
+                            '<div class="flex items-center gap-3">' +
+                            '<div class="font-bold text-yellow-600 min-w-8 text-center">#' + (i+1) + '</div>' +
+                            '<div class="flex-1">' +
+                            '<div class="font-semibold text-gray-900 dark:text-white">' + (s.username || 'Anonymous') + '</div>' +
+                            '<div class="text-sm text-gray-600 dark:text-gray-400">' + support + '</div>' +
+                            '</div></div></a>';
+                        list.insertAdjacentHTML('beforeend', html);
+                    });
+                    list.style.display = 'block';
+                }
+                if (empty) empty.style.display = 'none';
+                if (count) count.textContent = data.data.length;
+            } else {
+                if (list) list.style.display = 'none';
+                if (empty) empty.style.display = 'block';
+                if (count) count.textContent = '0';
+            }
+        } catch (e) {
+            if (empty) {
+                empty.style.display = 'block';
+                empty.innerHTML = '<p style="color: red;">Error loading supporters</p>';
+            }
+            if (list) list.style.display = 'none';
+        }
+    };
+    xhr.onerror = function() {
+        if (empty) {
+            empty.style.display = 'block';
+            empty.innerHTML = '<p style="color: red;">Failed to connect</p>';
+        }
+        if (list) list.style.display = 'none';
+    };
+    xhr.send();
+}
+
+function toggleAddToLibrary(storyId) {
+    const btn = document.getElementById('library-btn');
+    fetch('http://localhost/scrollnovels/api/add_library.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({story_id: storyId})
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            btn.textContent = data.action === 'added' ? '✅ Already Saved' : '🔖 Add to Library';
+            btn.classList.toggle('bg-yellow-600', data.action === 'added');
+            btn.classList.toggle('hover:bg-yellow-700', data.action === 'added');
+            btn.classList.toggle('bg-blue-600', data.action !== 'added');
+            btn.classList.toggle('hover:bg-blue-700', data.action !== 'added');
+        } else {
+            alert(data.error || 'Error updating library');
+        }
+    }).catch(e => console.error(e));
+}
+
+function reportBook(storyId) {
+        alert('Please log in to report this story.');
+    window.location.href = 'http://localhost/scrollnovels/pages/login.php';
+    return;
+        document.getElementById('report-story-id').value = storyId;
+    document.getElementById('reportMessage').classList.add('hidden');
+    document.getElementById('report-modal').classList.remove('hidden');
+}
+
+function closeReportModal() {
+    document.getElementById('report-modal').classList.add('hidden');
+    document.getElementById('report-reason').value = '';
+    document.getElementById('report-description').value = '';
+    document.getElementById('reportMessage').classList.add('hidden');
+}
+
+// Show report message
+function showReportMessage(message, type = 'success') {
+    const msgDiv = document.getElementById('reportMessage');
+    if (!msgDiv) return;
+    msgDiv.textContent = message;
+    msgDiv.classList.remove('hidden');
+    msgDiv.className = type === 'success' 
+        ? 'mb-4 p-3 rounded-lg text-sm font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300'
+        : 'mb-4 p-3 rounded-lg text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+}
+
+// Report form submission
+document.getElementById('report-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const storyId = document.getElementById('report-story-id').value;
+    const reason = document.getElementById('report-reason').value;
+    const description = document.getElementById('report-description').value;
+    
+    console.log('Report submission:', {storyId, reason, description});
+    
+    if (!storyId) {
+        showReportMessage('Story ID not found. Please refresh the page.', 'error');
+        return;
+    }
+    
+    if (!reason) {
+        showReportMessage('Please select a reason', 'error');
+        return;
+    }
+    
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    
+    fetch('http://localhost/scrollnovels/api/submit-report.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({story_id: parseInt(storyId), reason: reason, description: description})
+    }).then(r => {
+        console.log('Report response status:', r.status);
+        return r.json();
+    }).then(data => {
+        console.log('Report response data:', data);
+        if (data.success) {
+            showReportMessage('✓ ' + data.message, 'success');
+            setTimeout(() => {
+                closeReportModal();
+            }, 1500);
+        } else {
+            showReportMessage('✗ ' + (data.error || 'Error submitting report'), 'error');
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Report';
+    }).catch(e => {
+        console.error('Report submission error:', e);
+        showReportMessage('✗ Network error. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Report';
+    });
+});
+
+function setReadingStatus(storyId, status) {
+    fetch('http://localhost/scrollnovels/api/interactions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'set_reading_status', story_id: storyId, status: status})
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.error || 'Error updating status');
+        }
+    }).catch(e => console.error(e));
+}
+
+function toggleSaveStory(storyId) {
+    const btn = event.target.closest('button');
+    fetch('http://localhost/scrollnovels/api/stories/' + storyId + '/save', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            btn.classList.toggle('bg-yellow-600');
+            btn.classList.toggle('bg-blue-600');
+        }
+    });
+}
+
+function likeReview(reviewId) {
+    const btn = document.querySelector(`[data-review-id="${reviewId}"].review-like-btn`);
+    const countSpan = btn?.querySelector('.like-count');
+    fetch('http://localhost/scrollnovels/api/interactions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'like_review', review_id: reviewId, id: reviewId})
+    }).then(r => r.json()).then(data => {
+        if (data.success && countSpan) {
+            countSpan.textContent = data.likes || 0;
+            btn.classList.add('text-green-600');
+        }
+    }).catch(e => console.error('Error liking review:', e));
+}
+
+function dislikeReview(reviewId) {
+    const btn = document.querySelector(`[data-review-id="${reviewId}"].review-dislike-btn`);
+    const countSpan = btn?.querySelector('.dislike-count');
+    fetch('http://localhost/scrollnovels/api/interactions.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'dislike_review', review_id: reviewId, id: reviewId})
+    }).then(r => r.json()).then(data => {
+        if (data.success && countSpan) {
+            countSpan.textContent = data.dislikes || 0;
+            btn.classList.add('text-red-600');
+        }
+    }).catch(e => console.error('Error disliking review:', e));
+}
+
+document.getElementById('review-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get rating value
+    const ratingInput = document.querySelector('input[name="rating"]:checked');
+    if (!ratingInput) {
+        const msgDiv = document.getElementById('reviewMessage');
+        msgDiv.className = 'mb-4 p-3 rounded-lg text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+        msgDiv.textContent = '✗ Please select a rating';
+        msgDiv.classList.remove('hidden');
+        return;
+    }
+    
+    const rating = ratingInput.value;
+    const review_text = document.querySelector('textarea[name="review_text"]').value;
+    const story_id = 4;
+    
+    const formData = new FormData();
+    formData.append('story_id', story_id);
+    formData.append('rating', rating);
+    formData.append('review_text', review_text);
+    
+    fetch('http://localhost/scrollnovels/api/reviews/save-review.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        const msgDiv = document.getElementById('reviewMessage');
+        if (data.success) {
+            msgDiv.className = 'mb-4 p-3 rounded-lg text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
+            msgDiv.textContent = '✓ Review ' + data.action + ' successfully!';
+            msgDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            msgDiv.className = 'mb-4 p-3 rounded-lg text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+            msgDiv.textContent = '✗ ' + (data.error || 'Error saving review');
+            msgDiv.classList.remove('hidden');
+        }
+    })
+    .catch(e => {
+        console.error('Error:', e);
+        const msgDiv = document.getElementById('reviewMessage');
+        msgDiv.className = 'mb-4 p-3 rounded-lg text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+        msgDiv.textContent = '✗ Error saving review';
+        msgDiv.classList.remove('hidden');
+    });
+});
+
+function openSupportModal(bookId) {
+    const authorId = 1;
+    if (!authorId) {
+        alert('Unable to load support links');
+        return;
+    }
+    
+    document.getElementById('supportAuthorName').textContent = 'testuser';
+    
+    // Fetch author support links
+    fetch('http://localhost/scrollnovels/api/supporters/get-author-links.php?author_id=' + authorId)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const hasLinks = (data.data?.kofi || data.data?.patreon || data.data?.paypal);
+                
+                if (data.data?.kofi) {
+                    document.getElementById('kofiLink').href = data.data.kofi;
+                    document.getElementById('kofiLink').classList.remove('hidden');
+                } else {
+                    document.getElementById('kofiLink').classList.add('hidden');
+                }
+                
+                if (data.data?.patreon) {
+                    document.getElementById('patreonLink').href = data.data.patreon;
+                    document.getElementById('patreonLink').classList.remove('hidden');
+                } else {
+                    document.getElementById('patreonLink').classList.add('hidden');
+                }
+                
+                // Always show points button for logged-in users
+                                document.getElementById('pointsBtn').classList.add('hidden');
+                                
+                                const hasAnySupport = hasLinks;
+                                
+                if (hasAnySupport) {
+                    document.getElementById('noLinksMessage').classList.add('hidden');
+                } else {
+                    document.getElementById('noLinksMessage').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('noLinksMessage').classList.remove('hidden');
+                document.getElementById('kofiLink').classList.add('hidden');
+                document.getElementById('patreonLink').classList.add('hidden');
+                document.getElementById('pointsLink').classList.add('hidden');
+            }
+            
+            document.getElementById('supportLinkModal').classList.remove('hidden');
+        })
+        .catch(e => {
+            console.error('Error loading support links:', e);
+            document.getElementById('noLinksMessage').classList.remove('hidden');
+            document.getElementById('kofiLink').classList.add('hidden');
+            document.getElementById('patreonLink').classList.add('hidden');
+            document.getElementById('pointsLink').classList.add('hidden');
+            document.getElementById('supportLinkModal').classList.remove('hidden');
+        });
+}
+
+function closeSupportModal() {
+    document.getElementById('supportLinkModal').classList.add('hidden');
+}
+
+// Comments functionality
+async function loadComments() {
+    try {
+        const response = await fetch('http://localhost/scrollnovels/api/get-comments.php?story_id=4');
+        const data = await response.json();
+        
+        if (data.success) {
+            const commentsList = document.getElementById('comments-list');
+            
+            if (data.comments && data.comments.length > 0) {
+                commentsList.innerHTML = data.comments.map(comment => `
+                    <div class="p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-200 dark:bg-blue-900 flex items-center justify-center text-lg">👤</div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">${htmlEscapeComment(comment.username || 'Anonymous')}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">${new Date(comment.created_at).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">${htmlEscapeComment(comment.content)}</p>
+                    </div>
+                `).join('');
+            } else {
+                commentsList.innerHTML = '<div class="text-center py-12"><p class="text-gray-500 dark:text-gray-400">No comments yet. Be the first to comment!</p></div>';
+            }
+        } else {
+            console.error('Error:', data.error);
+            document.getElementById('comments-list').innerHTML = '<div class="text-center py-12"><p class="text-red-500">Error loading comments</p></div>';
+        }
+    } catch (error) {
+        console.error('Error loading comments:', error);
+        document.getElementById('comments-list').innerHTML = '<div class="text-center py-12"><p class="text-red-500">Error loading comments</p></div>';
+    }
+}
+
+function htmlEscapeComment(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(text || '').replace(/[&<>"']/g, m => map[m]);
+}
+
+// Submit comment
+document.getElementById('comment-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const content = document.getElementById('comment-content').value.trim();
+    
+    if (!content) {
+        alert('Please enter a comment');
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost/scrollnovels/api/comment.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            document.getElementById('comment-content').value = '';
+            alert('Comment posted successfully!');
+            loadComments();
+        } else {
+            alert(data.error || 'Error posting comment');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Error posting comment. Please try again.');
+    }
+});
+
+// Load comments when switching to comments tab
+const originalSwitchTab = window.switchTab || function() {};
+window.switchTab = function(tab) {
+    if (tab === 'comments') {
+        loadComments();
+    }
+    if (tab === 'reviews') {
+        loadReviewCounts();
+    }
+    // Call original switchTab logic if it exists
+    const elem = document.getElementById(tab + '-content');
+    if (elem) {
+        document.querySelectorAll('[id$="-content"]').forEach(e => e.classList.add('hidden'));
+        elem.classList.remove('hidden');
+        
+        // Update active tab styling
+        document.querySelectorAll('[id$="-tab"]').forEach(t => {
+            t.classList.remove('text-emerald-600', 'border-b-2', 'border-emerald-600');
+            t.classList.add('text-gray-600', 'dark:text-gray-400', 'border-b-2', 'border-transparent');
+        });
+        document.getElementById(tab + '-tab')?.classList.remove('text-gray-600', 'dark:text-gray-400', 'border-transparent');
+        document.getElementById(tab + '-tab')?.classList.add('text-emerald-600', 'border-emerald-600');
+    }
+};
+
+// Load review interaction counts
+function loadReviewCounts() {
+    document.querySelectorAll('[data-review-id]').forEach(btn => {
+        const reviewId = btn.getAttribute('data-review-id');
+        fetch('http://localhost/scrollnovels/api/interactions.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action: 'get_review_counts', review_id: reviewId})
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                const likeBtn = document.querySelector(`[data-review-id="${reviewId}"].review-like-btn`);
+                const dislikeBtn = document.querySelector(`[data-review-id="${reviewId}"].review-dislike-btn`);
+                if (likeBtn) likeBtn.querySelector('.like-count').textContent = data.likes || 0;
+                if (dislikeBtn) dislikeBtn.querySelector('.dislike-count').textContent = data.dislikes || 0;
+            }
+        }).catch(e => console.error('Error loading review counts:', e));
+    });
+};
+;
+</script>
+
+<!-- Report Modal -->
+<div id="report-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">🚩 Report This Story</h2>
+            <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl leading-none">✕</button>
+        </div>
+        
+        <form id="report-form" class="p-6 space-y-4">
+            <input type="hidden" id="report-story-id" name="story_id">
+            
+            <div id="reportMessage" class="hidden mb-4 p-3 rounded-lg text-sm font-medium"></div>
+            
+            <div>
+                <label class="block font-semibold text-gray-900 dark:text-white mb-2">Reason for Report</label>
+                <select id="report-reason" name="reason" required class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">Select a reason...</option>
+                    <option value="sexual_content">Sexual/Explicit Content</option>
+                    <option value="violence">Graphic Violence/Gore</option>
+                    <option value="plagiarism">Plagiarism/Copyright</option>
+                    <option value="spam">Spam</option>
+                    <option value="harassment">Harassment/Hate Speech</option>
+                    <option value="misleading">Misleading/False Info</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block font-semibold text-gray-900 dark:text-white mb-2">Details (Optional)</label>
+                <textarea id="report-description" name="description" placeholder="Please provide any additional details that help us understand your report..." 
+                          class="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+                          rows="4"></textarea>
+            </div>
+            
+            <div class="flex gap-3 pt-4">
+                <button type="button" onclick="closeReportModal()" 
+                        class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition">
+                    Submit Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Support Modal (Ko-fi / Patreon) -->
+<div id="supportLinkModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">❤️ Support This Author</h2>
+            <button onclick="closeSupportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl leading-none">✕</button>
+        </div>
+        
+        <div class="p-6 space-y-4">
+            <p class="text-gray-700 dark:text-gray-300 text-sm">Support <span id="supportAuthorName" class="font-semibold"></span> to help them keep writing amazing stories!</p>
+            
+            <div id="supportLinksContainer" class="space-y-3">
+                <!-- Ko-fi Link -->
+                <a id="kofiLink" href="#" target="_blank" class="hidden block w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg font-medium transition text-center">
+                    ❤️ Support on Ko-fi
+                </a>
+                
+                <!-- Patreon Link -->
+                <a id="patreonLink" href="#" target="_blank" class="hidden block w-full px-4 py-3 bg-gradient-to-r from-red-800 to-red-900 hover:from-red-900 hover:to-black text-white rounded-lg font-medium transition text-center">
+                    🎉 Join on Patreon
+                </a>
+                
+                <!-- Points Link -->
+                <button id="pointsBtn" onclick="openPointsModal()" aria-label="Support with points" class="hidden w-full px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-lg font-medium transition text-center">
+                    ⭐ Support with Points
+                </button>
+            </div>
+            
+            <div id="noLinksMessage" class="text-center text-gray-500 dark:text-gray-400 py-4">
+                <p>This author hasn't set up support links yet.</p>
+            </div>
+            
+            <button onclick="closeSupportModal()" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Points Support Modal -->
+<div id="pointsModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">⭐ Support with Points</h2>
+            <button onclick="closePointsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl leading-none">✕</button>
+        </div>
+        
+        <div class="p-6 space-y-4">
+            <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Your Points Balance:</p>
+                <p class="text-3xl font-bold text-emerald-600 dark:text-emerald-400" id="userPointsBalance">0</p>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Points to Give</label>
+                <input type="number" id="pointsAmount" min="1" value="10" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500">
+            </div>
+            
+            <div id="pointsMessage" class="hidden p-3 rounded-lg text-sm font-medium"></div>
+            
+            <div class="flex gap-3">
+                <button onclick="givePoints()" class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition">
+                    Give Points
+                </button>
+                <a href="http://localhost/scrollnovels/pages/points-dashboard.php" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition text-center">
+                    Buy More
+                </a>
+            </div>
+            
+            <button onclick="closePointsModal()" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+async function openPointsModal() {
+        alert('Please log in to support with points');
+    return;
+        
+    // Close support modal
+    closeSupportModal();
+    
+    // Fetch user's points balance
+    try {
+        const response = await fetch('http://localhost/scrollnovels/api/supporters/get-user-points.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            document.getElementById('userPointsBalance').textContent = data.points || 0;
+        } else {
+            document.getElementById('userPointsBalance').textContent = '0';
+        }
+    } catch (error) {
+        console.error('Error loading points:', error);
+        document.getElementById('userPointsBalance').textContent = '0';
+    }
+    
+    document.getElementById('pointsModal').classList.remove('hidden');
+}
+
+function closePointsModal() {
+    document.getElementById('pointsModal').classList.add('hidden');
+    document.getElementById('pointsMessage').classList.add('hidden');
+}
+
+async function givePoints() {
+    const amount = parseInt(document.getElementById('pointsAmount').value);
+    const authorId = 1;
+    const storyId = 4;
+    
+    if (!amount || amount < 1) {
+        showPointsMessage('Please enter a valid amount', 'error');
+        return;
+    }
+    
+    if (!authorId) {
+        showPointsMessage('Error: Author not found', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost/scrollnovels/api/supporters/give-points.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                author_id: authorId,
+                story_id: storyId,
+                points: amount
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showPointsMessage('✓ ' + (data.message || 'Points given successfully!'), 'success');
+            // Update current user's balance
+            document.getElementById('userPointsBalance').textContent = data.new_balance || 0;
+
+            // If author balance provided, update the display (if element exists)
+            try {
+                const authorBalEl = document.getElementById('authorPointsBalance');
+                if (authorBalEl && typeof data.author_balance !== 'undefined') {
+                    authorBalEl.textContent = data.author_balance;
+                }
+            } catch (e) { /* ignore */ }
+
+            // Refresh supporters list: use server-rendered HTML if provided, otherwise call loader
+            try {
+                if (data.author_supporters_html) {
+                    const list = document.getElementById('supporters-list');
+                    if (list) {
+                        list.innerHTML = data.author_supporters_html;
+                        list.classList.remove('hidden');
+                        document.getElementById('supporters-empty').classList.add('hidden');
+                    }
+                } else if (typeof loadSupporters === 'function') {
+                    loadSupporters();
+                }
+            } catch (e) { console.error(e); }
+
+            setTimeout(() => {
+                closePointsModal();
+            }, 1400);
+        } else {
+            showPointsMessage('✗ ' + (data.message || 'Failed to give points'), 'error');
+        }
+    } catch (error) {
+        console.error('Error giving points:', error);
+        showPointsMessage('✗ Network error. Please try again.', 'error');
+    }
+}
+
+function showPointsMessage(message, type) {
+    const msgDiv = document.getElementById('pointsMessage');
+    msgDiv.textContent = message;
+    msgDiv.className = 'p-3 rounded-lg text-sm font-medium ' + 
+        (type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' : 
+         'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300');
+    msgDiv.classList.remove('hidden');
+}
+</script>
+
+<!-- Books Like This Section -->
+<section class="max-w-6xl mx-auto px-4 py-8 mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <span class="text-2xl">📚</span> Books Like This
+        </h2>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=5" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <img src="https://via.placeholder.com/300x400?text=Book+Cover" 
+                                 alt="Portal Chronicles"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            Portal Chronicles                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            testuser                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 354</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                                    <span class="inline-block mt-2 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded">
+                                Fantasy                            </span>
+                                            </div>
+                </a>
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=3" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <img src="https://via.placeholder.com/300x400?text=Book+Cover" 
+                                 alt="Whispers in the Dark"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            Whispers in the Dark                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            testuser                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 244</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                                    <span class="inline-block mt-2 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded">
+                                Mystery                            </span>
+                                            </div>
+                </a>
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=8" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <img src="http://localhost/scrollnovels/uploads/covers/story-1764703585.png" 
+                                 alt="the vision"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            the vision                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            Zakiel admin                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 235</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                                    <span class="inline-block mt-2 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded">
+                                Fiction                            </span>
+                                            </div>
+                </a>
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=1" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <img src="https://via.placeholder.com/300x400?text=Book+Cover" 
+                                 alt="Simulated Edit (Updated)"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            Simulated Edit (Updated)                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            testuser                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 154</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                                    <span class="inline-block mt-2 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded">
+                                Fantasy                            </span>
+                                            </div>
+                </a>
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=2" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <img src="https://via.placeholder.com/300x400?text=Book+Cover" 
+                                 alt="City Lights"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            City Lights                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            testuser                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 98</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                                    <span class="inline-block mt-2 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded">
+                                Romance                            </span>
+                                            </div>
+                </a>
+                            <a href="http://localhost/scrollnovels/pages/book.php?id=15" 
+                   class="group block bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <!-- Cover -->
+                    <div class="aspect-[3/4] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 overflow-hidden">
+                                                    <div class="w-full h-full flex items-center justify-center text-4xl">📖</div>
+                                            </div>
+                    
+                    <!-- Info -->
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-900 dark:text-white line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            the winner                        </h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                            Zakiel admin                        </p>
+                        <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>👁️ 34</span>
+                            <span>❤️ 0</span>
+                        </div>
+                                            </div>
+                </a>
+                    </div>
+    </div>
+</section>
+
+<!-- Footer Component - Minimal (no closing tags so pages can include scripts after) -->
+<footer class="bg-gray-800 dark:bg-gray-900 text-gray-300 py-6 border-t border-gray-700 dark:border-gray-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Footer Links & Donate Button -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Support Button -->
+            <div class="w-full md:w-auto flex justify-center md:justify-start">
+                            </div>
+            
+            <!-- Footer Text & Links -->
+            <div class="text-center md:text-right text-xs md:text-sm space-y-2 md:space-y-0">
+                <div class="flex flex-wrap justify-center md:justify-end gap-2 md:gap-3 mb-2 md:mb-0">
+                    <a href="https://discord.gg/nkN7U7wPbx" target="_blank" rel="noopener" class="text-gray-300 hover:text-white transition" title="Join our Discord">
+                        💬 Discord
+                    </a>
+                    <span class="text-gray-600 hidden md:inline">·</span>
+                    <a href="http://localhost/scrollnovels/pages/privacy.php" class="text-gray-300 hover:text-white transition">Privacy</a>
+                    <span class="text-gray-600 hidden md:inline">·</span>
+                    <a href="http://localhost/scrollnovels/pages/terms.php" class="text-gray-300 hover:text-white transition">Terms</a>
+                    <span class="text-gray-600 hidden md:inline">·</span>
+                    <a href="http://localhost/scrollnovels/pages/content-policy.php" class="text-gray-300 hover:text-white transition">Content Policy</a>
+                    <span class="text-gray-600 hidden md:inline">·</span>
+                    <a href="http://localhost/scrollnovels/pages/dmca.php" class="text-gray-300 hover:text-white transition">DMCA</a>
+                    <span class="text-gray-600 hidden md:inline">·</span>
+                    <a href="http://localhost/scrollnovels/pages/contact.php" class="text-gray-300 hover:text-white transition">Contact</a>
+                </div>
+                <div class="text-gray-400">© 2025 Scroll Novels. All rights reserved.</div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+// Cute donate button functionality
+function openDonatePicker() {
+    document.getElementById('donate-picker-modal').classList.remove('hidden');
+}
+
+function closeDonatePicker() {
+    document.getElementById('donate-picker-modal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('donate-picker-modal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeDonatePicker();
+});
+</script>
+
+<script>
+// Fix: if a story link redirects to /pages/browse.php (slug mismatch), fallback to book.php?id=ID
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('a[data-story-href]').forEach(function(anchor){
+        anchor.addEventListener('click', async function(e){
+            // allow new-tab / modifier clicks
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            // Only intercept left click
+            if (e.button && e.button !== 0) return;
+            const href = anchor.getAttribute('data-story-href');
+            const id = anchor.getAttribute('data-story-id');
+            if (!href) return;
+            e.preventDefault();
+            try {
+                const res = await fetch(href, { method: 'GET', credentials: 'same-origin', redirect: 'follow' });
+                // Browser follows redirects; res.url is the final URL
+                const final = res.url || href;
+                if (final.indexOf('/pages/browse.php') !== -1 || final.indexOf('browse.php') !== -1) {
+                    if (id) {
+                        window.location.href = (window.SITE_URL ?? '') + '/pages/book.php?id=' + id;
+                        return;
+                    }
+                }
+                // otherwise navigate to final link
+                window.location.href = final;
+            } catch (err) {
+                // On fetch failure, fall back to id (numeric) or direct link
+                if (id) {
+                    window.location.href = (window.SITE_URL ?? '') + '/pages/book.php?id=' + id;
+                } else {
+                    window.location.href = href;
+                }
+            }
+        });
+    });
+});
+</script>
+
+<!-- Donate Picker Modal -->
+<div id="donate-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-30 z-40 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 max-w-sm w-full text-center">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">💝 Support the Website</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">Choose how you'd like to support:</p>
+        <div class="space-y-2">
+            <a href="https://www.patreon.com/Zakielvtuber" target="_blank" rel="noopener" class="block px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-medium transition">
+                🌟 Support the Website
+            </a>
+            <button onclick="closeDonatePicker()" class="w-full px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- NOTE: This file intentionally does NOT close </body> or </html> so pages may add page-specific scripts before closing. -->
+
+

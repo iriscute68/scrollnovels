@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Top Supporters</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .book-list { margin: 20px 0; }
+        .book { background: #f9f9f9; padding: 15px; margin: 10px 0; border-left: 4px solid #ddd; }
+        .book.has-supporters { border-left-color: #4CAF50; background: #f0f8f0; }
+        .book a { color: #2196F3; text-decoration: none; font-weight: bold; }
+        .book a:hover { text-decoration: underline; }
+        .book-title { font-size: 16px; margin: 5px 0; }
+        .book-info { font-size: 14px; color: #666; }
+        .status-yes { color: #4CAF50; font-weight: bold; }
+        .status-no { color: #f44336; }
+        .instruction { background: #e3f2fd; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Test Top Supporters Feature</h1>
+        
+        <div class="instruction">
+            <strong>⚠️ Important:</strong> The "Top Supporters" tab only shows supporters if the author actually has supporters. 
+            Use the list below to find a book with supporters!
+        </div>
+        
+        <h2>Books with Supporters ✓</h2>
+        <div class="book-list">
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=1">📖 Simulated Edit (Updated)</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+                <div class="book-info"><code>Click above to test!</code></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=2">📖 City Lights</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=3">📖 Whispers in the Dark</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=4">📖 The Last Survivor</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=5">📖 Portal Chronicles</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=9">📖 Test New Story</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+            
+            <div class="book has-supporters">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=19">📖 Test Fanfiction Story</a></div>
+                <div class="book-info">Author: testuser | <span class="status-yes">✓ 1 Supporter</span></div>
+            </div>
+        </div>
+        
+        <h2>Books without Supporters (show "No supporters yet")</h2>
+        <div class="book-list">
+            <div class="book">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=7">📖 jlkl-</a></div>
+                <div class="book-info">Author: Zakiel admin | <span class="status-no">✗ 0 Supporters</span></div>
+            </div>
+            
+            <div class="book">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=8">📖 the vision</a></div>
+                <div class="book-info">Author: Zakiel admin | <span class="status-no">✗ 0 Supporters</span></div>
+            </div>
+            
+            <div class="book">
+                <div class="book-title"><a href="http://localhost/scrollnovels/pages/book.php?id=11">📖 Test Story 1763405749</a></div>
+                <div class="book-info">Author: testauthor | <span class="status-no">✗ 0 Supporters</span></div>
+            </div>
+        </div>
+        
+        <h2>How to Test</h2>
+        <ol>
+            <li>Click on one of the books <strong>with Supporters</strong> above</li>
+            <li>On the book page, click the <strong>🏆 Top Supporters</strong> tab</li>
+            <li>You should see a supporter card appear (was "Zakiel admin" with points)</li>
+            <li>The "Loading supporters..." message should disappear</li>
+        </ol>
+        
+        <div class="instruction" style="background: #fff3cd; border-left: 4px solid #ffc107;">
+            <strong>ℹ️ Note:</strong> If you're viewing a book with "0 Supporters", 
+            the tab will show "No supporters yet. Be the first to support!" which is correct behavior.
+        </div>
+    </div>
+</body>
+</html>

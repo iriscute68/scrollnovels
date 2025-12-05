@@ -1,0 +1,236 @@
+/* Admin Dashboard Dark Theme - Scoped to .admin-wrapper only */
+
+.admin-wrapper {
+  --bg-primary: #0f0f12;
+  --bg-darker: #0b0b0d;
+  --card: #141418;
+  --card-hover: #1a1a1f;
+  --border: #22222a;
+  --text: #e6e7ea;
+  --muted: #9aa0a6;
+  --primary: #6366f1;
+  --accent: #8b5cf6;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+body.admin-area {
+  background: linear-gradient(180deg, var(--bg-primary), var(--bg-darker));
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.admin-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Override all global light styles when inside admin wrapper */
+.admin-wrapper * {
+  box-sizing: border-box;
+}
+
+.admin-wrapper,
+.admin-wrapper body,
+.admin-wrapper main {
+  background: transparent;
+  color: var(--text);
+}
+
+/* Force readable text in all contexts */
+.admin-wrapper h1,
+.admin-wrapper h2,
+.admin-wrapper h3,
+.admin-wrapper h4,
+.admin-wrapper h5,
+.admin-wrapper h6 {
+  color: var(--text);
+}
+
+.admin-wrapper p {
+  color: var(--text);
+}
+
+/* Override text utilities */
+.admin-wrapper .text-white,
+.admin-wrapper .text-primary,
+.admin-wrapper .text-secondary,
+.admin-wrapper .text-muted,
+.admin-wrapper .text-light {
+  color: var(--text) !important;
+}
+
+/* Override background utilities */
+.admin-wrapper .bg-white,
+.admin-wrapper .bg-surface,
+.admin-wrapper .bg-primary,
+.admin-wrapper .bg-light,
+.admin-wrapper .card,
+.admin-wrapper .table,
+.admin-wrapper button,
+.admin-wrapper input,
+.admin-wrapper select,
+.admin-wrapper textarea {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+.admin-wrapper input::placeholder,
+.admin-wrapper textarea::placeholder {
+  color: var(--muted) !important;
+}
+
+.admin-wrapper input:focus,
+.admin-wrapper select:focus,
+.admin-wrapper textarea:focus {
+  border-color: var(--primary) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Links */
+.admin-wrapper a {
+  color: var(--primary) !important;
+  text-decoration: none;
+}
+
+.admin-wrapper a:hover {
+  color: var(--accent) !important;
+}
+
+/* Buttons */
+.admin-wrapper .btn,
+.admin-wrapper button {
+  color: var(--text) !important;
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.admin-wrapper .btn:hover,
+.admin-wrapper button:hover {
+  background-color: var(--card-hover) !important;
+}
+
+.admin-wrapper .btn-primary,
+.admin-wrapper .btn.btn-primary {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.admin-wrapper .btn-primary:hover {
+  background-color: var(--accent) !important;
+}
+
+.admin-wrapper .btn-danger {
+  background-color: var(--danger) !important;
+  color: white !important;
+}
+
+.admin-wrapper .btn-success {
+  background-color: var(--success) !important;
+  color: white !important;
+}
+
+/* Tables */
+.admin-wrapper table {
+  color: var(--text);
+  border-collapse: collapse;
+}
+
+.admin-wrapper table th {
+  background-color: var(--card-hover) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  padding: 10px;
+}
+
+.admin-wrapper table td {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  padding: 10px;
+}
+
+.admin-wrapper table tbody tr:hover {
+  background-color: var(--card-hover) !important;
+}
+
+/* Badges */
+.admin-wrapper .badge {
+  background-color: var(--card-hover) !important;
+  color: var(--text) !important;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Forms and labels */
+.admin-wrapper .label,
+.admin-wrapper label {
+  color: var(--text) !important;
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* Ensure all list items are readable */
+.admin-wrapper li {
+  color: var(--text);
+}
+
+/* Footer styling inside admin */
+.admin-wrapper footer {
+  background-color: var(--bg-darker);
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Cards and containers */
+.admin-wrapper .card {
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+/* Forms */
+.admin-wrapper .form-group {
+  margin-bottom: 12px;
+}
+
+/* Alerts and messages */
+.admin-wrapper .alert {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.admin-wrapper .alert-success {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  border-color: var(--success) !important;
+  color: var(--success) !important;
+}
+
+.admin-wrapper .alert-danger {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border-color: var(--danger) !important;
+  color: var(--danger) !important;
+}
+
+.admin-wrapper .alert-warning {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: var(--warning) !important;
+  color: var(--warning) !important;
+}
+

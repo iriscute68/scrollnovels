@@ -1,0 +1,208 @@
+/* Fix for website interaction issues - ensure all clickable elements are interactive */
+
+/* Ensure all elements are clickable by default */
+body,
+html {
+    pointer-events: auto !important;
+}
+
+/* Ensure overlays allow pointer events to pass through unless explicitly disabled */
+.hidden {
+    pointer-events: none !important;
+}
+
+/* Ensure all links and buttons are always clickable */
+a,
+button,
+[role="button"],
+input,
+textarea,
+select,
+label {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure form elements work */
+form {
+    pointer-events: auto !important;
+}
+
+/* Ensure dropdown and modal overlays don't block interaction */
+.fixed.inset-0 {
+    pointer-events: auto !important;
+}
+
+/* Fix sidebar overlay - should allow clicks to pass through to interactive elements */
+.bg-black\/50 {
+    pointer-events: auto !important;
+}
+
+/* Ensure all tabs and tab content are clickable */
+[role="tab"],
+[role="tabpanel"],
+.tab-content,
+.tab-button {
+    pointer-events: auto !important;
+}
+
+/* Ensure header navigation is always clickable */
+header,
+nav,
+.navbar,
+.header,
+.navigation {
+    pointer-events: auto !important;
+}
+
+/* Ensure all cards are clickable */
+.card,
+.book-card,
+[class*="card"] {
+    pointer-events: auto !important;
+}
+
+/* Ensure carousel/slider controls work */
+button,
+.btn,
+[class*="btn"],
+[class*="button"] {
+    pointer-events: auto !important;
+}
+
+/* Fix for Tailwind's pointer-events-none - only apply when explicitly set on non-interactive content */
+.pointer-events-none:not(button):not(a):not(input):not(textarea):not(select):not([role="button"]) {
+    pointer-events: none;
+}
+
+/* Ensure pointer-events-auto overrides pointer-events-none */
+.pointer-events-auto {
+    pointer-events: auto !important;
+}
+
+/* Ensure main content area is interactive */
+main {
+    pointer-events: auto !important;
+}
+
+/* Fix any z-index stacking issues */
+header {
+    z-index: 50 !important;
+}
+
+.fixed.inset-0 {
+    z-index: 40 !important;
+}
+
+.modal,
+[class*="modal"],
+#adminLoginModal {
+    z-index: 50 !important;
+}
+
+.sidebar,
+[class*="sidebar"] {
+    z-index: 40 !important;
+}
+
+/* Ensure interactive content inside modals works */
+.modal a,
+.modal button,
+[class*="modal"] a,
+[class*="modal"] button,
+#adminLoginModal a,
+#adminLoginModal button {
+    pointer-events: auto !important;
+}
+
+/* Fix for overlay - should be clickable to close but not block other interactions */
+#sidebarOverlay {
+    pointer-events: auto !important;
+    z-index: 40 !important;
+}
+
+/* Ensure announcement carousel works */
+#prevAnnouncement,
+#nextAnnouncement,
+.announcement-dot {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure all list items are selectable */
+li,
+li a,
+li button {
+    pointer-events: auto !important;
+}
+
+/* Ensure theme toggle works */
+button[onclick*="toggleTheme"],
+button[onclick*="theme"],
+#themeToggle,
+[class*="theme"] {
+    pointer-events: auto !important;
+}
+
+/* Ensure all inputs and forms work */
+input:not([type="hidden"]),
+textarea,
+select,
+form input,
+form textarea,
+form select {
+    pointer-events: auto !important;
+}
+
+/* Fix for sidebar toggle button */
+#sidebarToggle {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure admin login form is interactive */
+#adminLoginForm input,
+#adminLoginForm button,
+#adminLoginForm textarea,
+#adminLoginForm select {
+    pointer-events: auto !important;
+}
+
+/* Emergency fix - if pointer-events-none is on body or main, remove it */
+body.pointer-events-none,
+main.pointer-events-none,
+html.pointer-events-none {
+    pointer-events: auto !important;
+}
+
+/* Ensure flex containers don't block interaction */
+.flex,
+.flex-1,
+.flex-col {
+    pointer-events: auto !important;
+}
+
+/* Ensure grid containers don't block interaction */
+.grid,
+.grid-cols-1,
+[class*="grid-cols"] {
+    pointer-events: auto !important;
+}
+
+/* Fix for any absolutely positioned elements */
+.absolute {
+    pointer-events: auto !important;
+}
+
+/* Ensure relative containers work */
+.relative {
+    pointer-events: auto !important;
+}
+
+/* Disable pointer-events-none on all interactive elements */
+button.pointer-events-none,
+a.pointer-events-none,
+input.pointer-events-none,
+[role="button"].pointer-events-none {
+    pointer-events: auto !important;
+}

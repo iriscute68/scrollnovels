@@ -1,0 +1,21 @@
+Options -MultiViews
+# Minimal, safe rewrite rules for front-controller. Keep this simple to avoid loops.
+RewriteEngine On
+RewriteBase /scrollnovels/
+
+# DO NOT REWRITE: admin folder, api folder, includes folder, or static assets
+RewriteRule ^(admin|api|includes|assets)(/|$) - [L]
+
+# Allow pages folder PHP files to execute
+RewriteRule ^pages/.*\.php$ - [L]
+
+# If the request maps to an existing file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise route to index.php (front controller)
+RewriteRule ^ index.php [QSA,L]
+
+# Note: more complex routing (book/, api/, admin/) can be added later. Avoid
+# Directory blocks or denying .php here in order to prevent accidental 500s/loops.

@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "title": "Spring Writing Challenge 2025",
+    "description": "Unleash your creativity! Submit your best original stories for our spring competition. Multiple categories, massive prizes, and exposure to millions of readers.",
+    "start_date": "2025-03-01",
+    "end_date": "2025-05-31",
+    "prize_pool": 50000,
+    "max_entries": 1000,
+    "active": 1,
+    "categories": ["Fantasy", "Romance", "Mystery", "Science Fiction"],
+    "judges": 12,
+    "winners": 5
+  },
+  {
+    "id": 2,
+    "title": "Emerging Voices Competition",
+    "description": "For new and underrated authors. Show the world what you can do!",
+    "start_date": "2025-04-15",
+    "end_date": "2025-06-30",
+    "prize_pool": 25000,
+    "max_entries": 500,
+    "active": 1,
+    "categories": ["All Genres"],
+    "judges": 8,
+    "winners": 3
+  }
+]

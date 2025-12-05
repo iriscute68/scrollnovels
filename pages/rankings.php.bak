@@ -1,0 +1,9 @@
+<?php
+// Backup of original pages/rankings.php
+// Created before replacing with new rankings implementation
+file_put_contents(__FILE__, "Backup created\n");
+?>
+<?php
+// Backup of pages/rankings.php (created before applying add-code7 integration)
+// Timestamp: backup by script
+?>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Page - Supporters Test</title>
+</head>
+<body>
+
+<h1>Testing Top Supporters Feature</h1>
+<p>This mimics what book.php does</p>
+
+<!-- Tab button -->
+<button id="supporters-tab" onclick="switchTab('supporters')" style="padding: 10px 20px; cursor: pointer;">
+    🏆 Top Supporters (<span id="supporters-count">0</span>)
+</button>
+
+<!-- Tab content -->
+<div id="supporters-content" style="display:none; border: 1px solid #ccc; padding: 20px; margin-top: 20px;">
+    <div id="supporters-loading" style="display:block; text-align:center; padding:3rem 0; color:#6b7280;">
+        <p>Loading supporters...</p>
+    </div>
+    <div id="supporters-list" style="display:none;">
+        <!-- Populated by JavaScript -->
+    </div>
+    <div id="supporters-empty" style="display:none;">
+        <p>No supporters yet. Be the first to support!</p>
+    </div>
+</div>
+
+<script>
+const storyAuthorId = 1; // Simulating The Last Survivor (author_id=1)
+const SITE_URL = 'http://localhost/scrollnovels';
+
+function switchTab(tab) {
+    console.log('📑 switchTab called with:', tab);
+    
+    // Hide all content (for demo, just supporters)
+    document.getElementById('supporters-content').style.display = 'none';
+    
+    // Show selected content
+    document.getElementById(tab + '-content').style.display = 'block';
+    
+    // Load supporters if supporters tab is selected
+    if (tab === 'supporters') {
+        console.log('💫 Calling loadSupporters()');
+        loadSupporters();
+    }
+}
+
+function loadSupporters() {
+    console.log('🔵 loadSupporters() called');
+    const loading = document.getElementById('supporters-loading');
+    const list = document.getElementById('supporters-list');
+    const empty = document.getElementById('supporters-empty');
+    const count = document.getElementById('supporters-count');
+    
+    console.log('📌 DOM elements found:', {loading: !!loading, list: !!list, empty: !!empty, count: !!count});
+    
+    const authorId = storyAuthorId;
+    console.log('👤 Author ID:', authorId);
+    
+    if (!authorId) {
+        console.warn('❌ No author ID!');
+        if (loading) loading.style.display = 'none';
+        if (empty) empty.style.display = 'block';
+        if (count) count.textContent = '0';
+        return;
+    }
+    
+    const url = SITE_URL + '/api/supporters/get-top-supporters.php?author_id=' + authorId + '&limit=200';
+    console.log('🔗 API URL:', url);
+    
+    fetch(url)
+        .then(response => {
+            console.log('📬 Response received:', response.status);
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ Data received:', data);
+            console.log('   Success:', data.success);
+            console.log('   Data count:', data.data ? data.data.length : 'null');
+            
+            // Hide loading
+            if (loading) {
+                loading.style.display = 'none';
+                console.log('✓ Loading hidden');
+            }
+            
+            // Check if we have data
+            if (data.success && data.data && data.data.length > 0) {
+                console.log('📊 Rendering', data.data.length, 'supporters');
+                if (list) {
+                    list.innerHTML = '';
+                    data.data.forEach((s, i) => {
+                        const tips = s.tip_amount ? '$' + parseFloat(s.tip_amount).toFixed(2) : '';
+                        const pts = s.points_total ? parseInt(s.points_total) + ' pts' : '';
+                        const support = [tips, pts].filter(x => x).join(' + ') || 'Supporter';
+                        
+                        const html = `
+                            <a href="${SITE_URL}/pages/profile.php?user_id=${s.supporter_id}" style="display: block; padding: 12px; background: #fef3c7; border-radius: 4px; text-decoration: none; color: #333; margin: 10px 0;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-weight: bold; color: #d97706; min-width: 32px; text-align: center;">#${i+1}</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: bold; color: #111;">${s.username}</div>
+                                        <div style="font-size: 0.875em; color: #666;">${support}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                        list.insertAdjacentHTML('beforeend', html);
+                    });
+                    list.style.display = 'block';
+                    console.log('✓ List displayed');
+                }
+                if (empty) empty.style.display = 'none';
+                if (count) count.textContent = data.data.length;
+            } else {
+                console.log('📭 No supporters data');
+                if (list) list.style.display = 'none';
+                if (empty) {
+                    empty.style.display = 'block';
+                    console.log('✓ Empty message displayed');
+                }
+                if (count) count.textContent = '0';
+            }
+        })
+        .catch(e => {
+            console.error('❌ Fetch error:', e.name, '-', e.message);
+            if (loading) loading.style.display = 'none';
+            if (list) list.style.display = 'none';
+            if (empty) {
+                empty.style.display = 'block';
+                empty.innerHTML = '<p style="color: red; font-weight: bold;">Error: ' + e.message + '</p>';
+            }
+        });
+}
+
+console.log('Script loaded. Open browser console (F12) and click the tab button above.');
+</script>
+
+</body>
+</html>

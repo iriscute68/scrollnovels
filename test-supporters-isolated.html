@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Top Supporters Loading</title>
+</head>
+<body>
+<h1>Testing Top Supporters Feature</h1>
+<p>Open developer console (F12) and click the button below</p>
+
+<button onclick="testLoadSupporters()">Click to Load Supporters</button>
+
+<div id="supporters-loading" style="display:block; text-align:center; padding:3rem 0; color:#6b7280;">
+    <p>Loading supporters...</p>
+</div>
+<div id="supporters-list" class="space-y-4" style="display:none;">
+    <!-- Populated by JavaScript -->
+</div>
+<div id="supporters-empty" style="display:none;">
+    <p style="color: #666;">No supporters yet</p>
+</div>
+<div id="supporters-count" style="display:none;">0</div>
+
+<script>
+function testLoadSupporters() {
+    console.log('🔵 loadSupporters() called');
+    const loading = document.getElementById('supporters-loading');
+    const list = document.getElementById('supporters-list');
+    const empty = document.getElementById('supporters-empty');
+    const count = document.getElementById('supporters-count');
+    
+    console.log('📌 DOM elements found:', {loading: !!loading, list: !!list, empty: !!empty, count: !!count});
+    
+    const authorId = 1;
+    console.log('👤 Author ID:', authorId);
+    
+    if (!authorId) {
+        console.warn('❌ No author ID!');
+        if (loading) loading.style.display = 'none';
+        if (empty) empty.style.display = 'block';
+        if (count) count.textContent = '0';
+        return;
+    }
+    
+    const url = 'http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=' + authorId + '&limit=200';
+    console.log('🔗 API URL:', url);
+    
+    fetch(url)
+        .then(response => {
+            console.log('📬 Response received:', response.status);
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ Data received:', data);
+            console.log('   Success:', data.success);
+            console.log('   Data count:', data.data ? data.data.length : 'null');
+            
+            // Hide loading
+            if (loading) {
+                loading.style.display = 'none';
+                console.log('✓ Loading hidden');
+            }
+            
+            // Check if we have data
+            if (data.success && data.data && data.data.length > 0) {
+                console.log('📊 Rendering', data.data.length, 'supporters');
+                if (list) {
+                    list.innerHTML = '';
+                    data.data.forEach((s, i) => {
+                        const tips = s.tip_amount ? '$' + parseFloat(s.tip_amount).toFixed(2) : '';
+                        const pts = s.points_total ? parseInt(s.points_total) + ' pts' : '';
+                        const support = [tips, pts].filter(x => x).join(' + ') || 'Supporter';
+                        
+                        const html = `
+                            <a href="http://localhost/scrollnovels/pages/profile.php?user_id=${s.supporter_id}" style="display: block; padding: 12px; background: #fef3c7; border-radius: 4px; text-decoration: none; color: #333; margin: 10px 0;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-weight: bold; color: #d97706; min-width: 32px; text-align: center;">#${i+1}</div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: bold; color: #111;">${s.username}</div>
+                                        <div style="font-size: 0.875em; color: #666;">${support}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                        list.insertAdjacentHTML('beforeend', html);
+                    });
+                    list.style.display = 'block';
+                    console.log('✓ List displayed');
+                }
+                if (empty) empty.style.display = 'none';
+                if (count) count.textContent = data.data.length;
+            } else {
+                console.log('📭 No supporters data');
+                if (list) list.style.display = 'none';
+                if (empty) {
+                    empty.style.display = 'block';
+                    console.log('✓ Empty message displayed');
+                }
+                if (count) count.textContent = '0';
+            }
+        })
+        .catch(e => {
+            console.error('❌ Fetch error:', e.name, '-', e.message);
+            if (loading) loading.style.display = 'none';
+            if (list) list.style.display = 'none';
+            if (empty) {
+                empty.style.display = 'block';
+                empty.innerHTML = '<p style="color: red; font-weight: bold;">Error: ' + e.message + '</p>';
+            }
+        });
+}
+</script>
+
+</body>
+</html>

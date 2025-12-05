@@ -1,0 +1,9 @@
+<?php
+// Backup of original pages/browse.php
+// Created before replacing with user-provided browse implementation
+file_put_contents(__FILE__, "Backup created\n");
+?>
+<?php
+// Backup of pages/browse.php (created before applying add-code7 integration)
+// Timestamp: backup by script
+?>

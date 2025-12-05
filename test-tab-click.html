@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug: Tab Click Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .button-test { padding: 10px 20px; margin: 10px 0; background: #10b981; color: white; border: none; cursor: pointer; }
+        .log { background: #1e1e1e; color: #0f0; padding: 15px; border-radius: 4px; font-family: monospace; height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+<h1>Testing Tab Click Mechanism</h1>
+
+<button id="test-btn" class="button-test" onclick="switchTab('supporters')">
+    Click Me (Should Trigger switchTab)
+</button>
+
+<div class="log" id="log"></div>
+
+<script>
+function log(msg) {
+    const el = document.getElementById('log');
+    el.innerHTML += msg + '\n';
+    el.scrollTop = el.scrollHeight;
+    console.log(msg);
+}
+
+// Override functions to log
+window.origLog = console.log;
+console.log = function(...args) {
+    window.origLog(...args);
+    log(Array.from(args).join(' '));
+};
+
+function switchTab(tab) {
+    log('✓ switchTab(' + tab + ') called');
+    if (tab === 'supporters') {
+        log('✓ Tab is supporters, calling loadSupporters()');
+        loadSupporters();
+    }
+}
+
+function loadSupporters() {
+    log('✓ loadSupporters() called');
+    log('✓ Attempting fetch to API...');
+    
+    const url = 'http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=1&limit=200';
+    log('URL: ' + url);
+    
+    fetch(url)
+        .then(r => {
+            log('✓ Response received: ' + r.status);
+            return r.json();
+        })
+        .then(data => {
+            log('✓ JSON parsed');
+            log('✓ Success: ' + data.success);
+            log('✓ Data count: ' + (data.data ? data.data.length : 0));
+        })
+        .catch(e => {
+            log('✗ Error: ' + e.message);
+        });
+}
+
+log('Page loaded. Click button above.');
+</script>
+
+</body>
+</html>

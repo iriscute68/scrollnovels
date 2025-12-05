@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulate Top Supporters Click</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+    <div class="p-8">
+        <h1>Simulating Book.php Top Supporters</h1>
+        
+        <!-- Tabs -->
+        <div class="flex border-b mb-4">
+            <button onclick="switchTab('chapters')" id="chapters-tab" class="px-4 py-2 font-semibold border-b-2 border-transparent hover:border-gray-300">📖 Chapters (5)</button>
+            <button onclick="switchTab('reviews')" id="reviews-tab" class="px-4 py-2 font-semibold border-b-2 border-transparent hover:border-gray-300">⭐ Reviews (2)</button>
+            <button onclick="switchTab('supporters')" id="supporters-tab" class="px-4 py-2 font-semibold border-b-2 border-transparent hover:border-gray-300">🏆 Top Supporters (0)</button>
+            <button onclick="switchTab('status')" id="status-tab" class="px-4 py-2 font-semibold border-b-2 border-transparent hover:border-gray-300">📊 Stats</button>
+        </div>
+        
+        <!-- Content Areas -->
+        <div id="chapters-content" class="p-8">Chapters content...</div>
+        <div id="reviews-content" class="p-8 hidden">Reviews content...</div>
+        
+        <div id="supporters-content" class="p-8 hidden">
+            <div id="supporters-loading" style="text-align:center; padding:3rem 0; color:#6b7280;">
+                <p>Loading supporters...</p>
+            </div>
+            <div id="supporters-list" class="space-y-4" style="display:none;">
+                <!-- Populated by JavaScript -->
+            </div>
+            <div id="supporters-empty" class="text-center py-12" style="display:none;">
+                <p>No supporters yet. Be the first to support!</p>
+            </div>
+        </div>
+        
+        <div id="status-content" class="p-8 hidden">Status content...</div>
+    </div>
+
+    <script>
+        function htmlEscapeComment(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+        
+        function switchTab(tab) {
+            console.log('Switching to tab:', tab);
+            // Hide all content
+            document.getElementById('chapters-content').classList.add('hidden');
+            document.getElementById('reviews-content').classList.add('hidden');
+            document.getElementById('supporters-content').classList.add('hidden');
+            document.getElementById('status-content').classList.add('hidden');
+            
+            // Remove active state from all tabs
+            document.getElementById('chapters-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+            document.getElementById('reviews-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+            document.getElementById('supporters-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+            document.getElementById('status-tab').classList.remove('text-emerald-600', 'border-emerald-600');
+            
+            // Show selected content
+            document.getElementById(tab + '-content').classList.remove('hidden');
+            document.getElementById(tab + '-tab').classList.add('text-emerald-600', 'border-emerald-600');
+            
+            // Load supporters if supporters tab is selected
+            if (tab === 'supporters') {
+                console.log('Calling loadSupporters()');
+                loadSupporters();
+            }
+        }
+        
+        function loadSupporters() {
+            console.log('=== loadSupporters() CALLED ===');
+            
+            // Get all DOM elements we'll need
+            const loadingEl = document.getElementById('supporters-loading');
+            const listEl = document.getElementById('supporters-list');
+            const emptyEl = document.getElementById('supporters-empty');
+            const countEl = document.getElementById('supporters-count');
+            
+            console.log('✓ DOM Check: loading=' + (loadingEl ? 'YES' : 'NO') + ', list=' + (listEl ? 'YES' : 'NO') + ', empty=' + (emptyEl ? 'YES' : 'NO') + ', count=' + (countEl ? 'YES' : 'NO'));
+            
+            const authorId = 1;  // Simulating author_id = 1
+            console.log('✓ Author ID:', authorId);
+            
+            // Early display of status for debugging
+            if (loadingEl) {
+                loadingEl.innerHTML = '<p>Loading supporters for author ' + authorId + '...</p>';
+            }
+            
+            if (!authorId) {
+                console.log('✗ No author ID!');
+                if (loadingEl) {
+                    loadingEl.style.display = 'none';
+                    loadingEl.innerHTML = '';
+                }
+                if (emptyEl) {
+                    emptyEl.style.display = 'block';
+                    emptyEl.innerHTML = '<p>No author information available</p>';
+                }
+                if (countEl) countEl.textContent = '0';
+                return;
+            }
+            
+            const apiUrl = 'http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=' + authorId + '&limit=200';
+            console.log('✓ API URL:', apiUrl);
+            
+            // Add timeout to fetch
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            
+            fetch(apiUrl, { signal: controller.signal })
+                .then(r => {
+                    clearTimeout(timeoutId);
+                    console.log('✓ Fetch response received, status:', r.status);
+                    if (!r.ok) {
+                        throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+                    }
+                    return r.text();
+                })
+                .then(text => {
+                    console.log('✓ Response text length:', text.length, '| First 150 chars:', text.substring(0, 150));
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('✗ JSON parse error:', e.message);
+                        console.error('✗ Raw text was:', text);
+                        throw e;
+                    }
+                })
+                .then(data => {
+                    console.log('✓ API Success:', data.success, '| Data count:', (data.data ? data.data.length : 0));
+                    
+                    // ALWAYS hide loading first
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    
+                    // Update supporters count in tab
+                    const count = (data.data && data.data.length) ? data.data.length : 0;
+                    if (countEl) countEl.textContent = count;
+                    
+                    // Check if we have data
+                    if (data.success && data.data && Array.isArray(data.data) && data.data.length > 0) {
+                        // Clear previous content
+                        if (listEl) listEl.innerHTML = '';
+                        
+                        // Add each supporter
+                        data.data.forEach((supporter, index) => {
+                            if (!supporter) return;
+                            
+                            const tierBadge = supporter.patreon_tier ? ` (${supporter.patreon_tier})` : '';
+                            const tipAmount = parseFloat(supporter.tip_amount || 0);
+                            const pointsAmount = parseInt(supporter.points_total || 0);
+                            
+                            let supportDisplay = '';
+                            if (tipAmount > 0) {
+                                supportDisplay += `💰 $${tipAmount.toFixed(2)}`;
+                            }
+                            if (pointsAmount > 0) {
+                                if (supportDisplay) supportDisplay += ' + ';
+                                supportDisplay += `⭐ ${pointsAmount} pts`;
+                            }
+                            if (!supportDisplay) {
+                                supportDisplay = '💝 Supporter';
+                            }
+                            
+                            const profileUrl = 'http://localhost/scrollnovels/pages/profile.php?user_id=' + (supporter.supporter_id || 'unknown');
+                            const profileImage = supporter.profile_image ? `<img src="${htmlEscapeComment(supporter.profile_image)}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">` : '<span>👤</span>';
+                            const username = htmlEscapeComment(supporter.username || 'Anonymous');
+                            const status = supporter.status === 'active' ? '✅ Active' : '⏸️ ' + (supporter.status || 'unknown');
+                            
+                            const html = `
+                                <a href="${profileUrl}" style="display:block; padding:1rem; background: linear-gradient(to right, #fef3c7, #fed7aa); border-radius:0.5rem; text-decoration:none; color:inherit;">
+                                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                                        <div style="display:flex; align-items:center; gap:1rem; flex:1;">
+                                            <div style="font-size:1.5rem; font-weight:bold; color:#b45309; min-width:3rem; text-align:center;">#${index + 1}</div>
+                                            <div style="width:3rem; height:3rem; border-radius:50%; background:#fcd34d; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+                                                ${profileImage}
+                                            </div>
+                                            <div style="flex:1;">
+                                                <h4 style="font-weight:600; color:#1f2937;">${username}</h4>
+                                                <p style="font-size:0.875rem; color:#4b5563;">Top Supporter${tierBadge}</p>
+                                            </div>
+                                        </div>
+                                        <div style="text-align:right; margin-left:1rem; flex-shrink:0;">
+                                            <div style="font-size:1.125rem; font-weight:bold; color:#b45309;">${supportDisplay}</div>
+                                            <p style="font-size:0.75rem; color:#4b5563; margin-top:0.25rem;">${status}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                            
+                            if (listEl) {
+                                listEl.insertAdjacentHTML('beforeend', html);
+                            }
+                        });
+                        
+                        // Show list, hide empty
+                        if (listEl) listEl.style.display = 'block';
+                        if (emptyEl) emptyEl.style.display = 'none';
+                    } else {
+                        // No data - show empty message
+                        if (listEl) listEl.style.display = 'none';
+                        if (emptyEl) emptyEl.style.display = 'block';
+                    }
+                })
+                .catch(e => {
+                    console.error('✗ ERROR loading supporters');
+                    console.error('  - Type:', e.name);
+                    console.error('  - Message:', e.message);
+                    if (e.stack) console.error('  - Stack:', e.stack);
+                    
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (listEl) listEl.style.display = 'none';
+                    if (emptyEl) {
+                        emptyEl.style.display = 'block';
+                        emptyEl.innerHTML = '<p style="color: #dc2626; font-weight: bold;">Error: ' + e.message + '</p><p style="font-size: 0.9em; color: #666;">Check browser console for details</p>';
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

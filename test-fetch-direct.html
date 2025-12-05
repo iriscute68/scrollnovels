@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Browser Test - Top Supporters</title>
+    <style>
+        body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .log { background: #f9f9f9; padding: 15px; border-radius: 4px; margin: 10px 0; max-height: 400px; overflow-y: auto; border: 1px solid #ddd; font-family: monospace; font-size: 12px; }
+        .log-item { margin: 5px 0; }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button { background: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1976D2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Direct Browser Test</h1>
+        
+        <button onclick="testFetch()">Test Fetch API Call</button>
+        <button onclick="clearLog()">Clear Log</button>
+        
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        const logEl = document.getElementById('log');
+        
+        function addLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log-item ${type}`;
+            div.textContent = new Date().toLocaleTimeString() + ' - ' + msg;
+            logEl.appendChild(div);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function clearLog() {
+            logEl.innerHTML = '';
+        }
+        
+        async function testFetch() {
+            addLog('Starting fetch test...', 'info');
+            
+            const apiUrl = 'http://localhost/scrollnovels/api/supporters/get-top-supporters.php?author_id=1&limit=200';
+            addLog('API URL: ' + apiUrl, 'info');
+            
+            try {
+                addLog('Calling fetch()...', 'info');
+                const response = await fetch(apiUrl);
+                addLog('Fetch completed! Status: ' + response.status, 'success');
+                
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                }
+                
+                addLog('Reading response text...', 'info');
+                const text = await response.text();
+                addLog('Response length: ' + text.length + ' bytes', 'success');
+                addLog('First 100 chars: ' + text.substring(0, 100), 'info');
+                
+                addLog('Parsing JSON...', 'info');
+                const data = JSON.parse(text);
+                addLog('JSON parse successful!', 'success');
+                
+                addLog('API success: ' + data.success, data.success ? 'success' : 'error');
+                addLog('Total supporters: ' + data.total, 'success');
+                addLog('Data items: ' + (data.data ? data.data.length : 0), 'success');
+                
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach((sup, i) => {
+                        addLog('  Supporter ' + (i+1) + ': ' + sup.username + ' (' + sup.points_total + ' pts)', 'success');
+                    });
+                }
+                
+            } catch (e) {
+                addLog('ERROR: ' + e.name + ': ' + e.message, 'error');
+                addLog('Stack: ' + e.stack, 'error');
+            }
+        }
+        
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            addLog('Page loaded. Click "Test Fetch API Call" or wait...', 'info');
+            setTimeout(() => {
+                addLog('Auto-testing...', 'info');
+                testFetch();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

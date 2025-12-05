@@ -1,0 +1,4 @@
+# Allow direct access to admin pages
+RewriteEngine Off
+
+# Disable parent directory rules

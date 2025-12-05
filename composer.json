@@ -1,0 +1,16 @@
+{
+    "name": "scrollnovels/app",
+    "description": "Scroll Novels - A novel reading and publishing platform",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "stripe/stripe-php": "^11.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "ScrollNovels\\": "src/"
+        }
+    }
+}
